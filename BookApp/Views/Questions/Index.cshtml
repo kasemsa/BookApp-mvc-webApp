@@ -1,0 +1,13 @@
+﻿html
+@model List<Question>
+
+<h1>Questions</h1>
+
+<ul>
+    @foreach (var question in Model)
+    {
+        <li>
+            <a asp-controller="Question" asp-action="Details" asp-route-id="@question.Id">@question.Title</a>
+        </li>
+    }
+</ul>

@@ -1,0 +1,55 @@
+﻿@model BookApp.Models.BookViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+
+<div class="form-group">
+    <label asp-for="CategoryID" class="control-label"></label>
+    <select asp-for="CategoryID" class="form-control" asp-items="@(new SelectList(Model.Categories,"CategoryID","CategoryName"))"></select>
+</div>
+<div class="form-group">
+    <label asp-for="SubcategoryID" class="control-label"></label>
+    <select asp-for="SubcategoryID" class="form-control" asp-items="@(new SelectList(Model.Subcategories, "SubcategoryID", "SubcategoryID"))"></select>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#CategoryID').on('change', function () {
+               
+                var categoryID = $(this).val();
+                var subCategoryList = $('#SubcategoryID');
+
+                subCategoryList.empty();
+                subCategoryList.append('<option></option>')
+
+                if(categoryID!==''){
+                    $.ajax({
+                        url: '/Home/GetSubcategory?categoryId=' + categoryID,
+                        success: function (subCategory) {
+                            console.log(subCategory);
+                            $.each(subCategory, function (i, subCat) {
+
+                                $('#SubcategoryID').append($('<option></option>').attr('value', subCat.subcategoryID).text(subCat.subcategoryName))
+                            });
+                        },
+                        error: function (subCategory) {
+                            alert('someThing Wrong!!');
+                        },
+                    });
+                
+                }
+
+             
+            });
+
+        });
+    </script>
+}
